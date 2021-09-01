@@ -15,7 +15,8 @@ class InjectOnCreate {
     public static final ClassPool classPool = ClassPool.getDefault()
 
 
-    static void injectOnCreateOnResume(String path, Project project) {
+    static void injectMethod(String path, Project project) {
+        def packagename =  project.configExtension.packageName
         classPool.appendClassPath(path)
         classPool.appendClassPath(project.android.bootClasspath[0].toString())
         classPool.importPackage('android.os.Bundle')
@@ -32,8 +33,8 @@ class InjectOnCreate {
                 }
                 def className = filePath.replace('.class','').replace("\\", ".")
                         .replace("/", ".")
-                if (className.contains('com.xiaomu')) {
-                    def packageName = className.substring(className.indexOf('com.xiaomu'), className.length())
+                if (className.contains(packagename)) {
+                    def packageName = className.substring(className.indexOf(packagename), className.length())
                     CtClass ctClass =  classPool.getCtClass(packageName)
                     CtMethod [] ctMethods =  ctClass.getDeclaredMethods()
                     for(CtMethod method : ctMethods){
@@ -57,7 +58,7 @@ class InjectOnCreate {
         if (ctClass.isFrozen()) {
             ctClass.defrost()
         }
-        println('----------------insert---------------------------'+method.name)
+        println('----------------insert---------------------------'+ ctClass.name + '   ' +method.name)
         method.addLocalVariable("start",CtClass.longType)
         method.insertBefore("start = System.currentTimeMillis();")
         method.insertAfter("System.out.println(\""  + ctClass.name + "  " + method.name+ " exec time is :\"  + (System.currentTimeMillis() - start) + \"ms\");");

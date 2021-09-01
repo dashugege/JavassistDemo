@@ -21,7 +21,7 @@ class InjectTransform extends Transform {
 
     private Project mProject
 
-    InjectTransform(Project project){
+    InjectTransform(Project project) {
         this.mProject = project
     }
 
@@ -54,8 +54,6 @@ class InjectTransform extends Transform {
     @Override
     void transform(Context context, Collection<TransformInput> inputs, Collection<TransformInput> referencedInputs, TransformOutputProvider outputProvider, boolean isIncremental) throws IOException, TransformException, InterruptedException {
         super.transform(context, inputs, referencedInputs, outputProvider, isIncremental)
-        println '--------------------transform 开始-------------------'
-
         // Transform的inputs有两种类型，一种是目录，一种是jar包，要分开遍历
         inputs.each {
             TransformInput input ->
@@ -65,7 +63,7 @@ class InjectTransform extends Transform {
                     DirectoryInput directoryInput ->
                         // 注入代码
 //                        MyInjectByJavassit.injectToast(directoryInput.file.absolutePath, mProject)
-                        InjectOnCreate.injectOnCreateOnResume(directoryInput.file.absolutePath, mProject)
+                        InjectOnCreate.injectMethod(directoryInput.file.absolutePath, mProject)
 
                         // 获取输出目录
                         def dest = outputProvider.getContentLocation(directoryInput.name,
@@ -93,7 +91,5 @@ class InjectTransform extends Transform {
                         FileUtils.copyFile(jarInput.file, dest)
                 }
         }
-
-        println '---------------------transform 结束-------------------'
     }
 }

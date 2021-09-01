@@ -10,7 +10,8 @@ class InitPlugin implements Plugin<Project> {
     void apply(Project project) {
 
         println '***************** Plugin apply*********************'
-        AppExtension appExtension = project.getExtensions().findByType(AppExtension.class);
+        project.getExtensions().create("configExtension",ConfigExtension.class)
+        AppExtension appExtension = project.getExtensions().findByType(AppExtension.class)
         appExtension.registerTransform(new InjectTransform(project))
 
     }
