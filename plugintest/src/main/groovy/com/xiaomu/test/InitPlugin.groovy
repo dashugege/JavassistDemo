@@ -9,7 +9,7 @@ class InitPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
 
-        println '***************** Plugin apply*********************'
+        println '*****************javassist Plugin apply*********************'
         project.getExtensions().create("configExtension",ConfigExtension.class)
         AppExtension appExtension = project.getExtensions().findByType(AppExtension.class)
         appExtension.registerTransform(new InjectTransform(project))

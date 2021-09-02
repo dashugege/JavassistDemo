@@ -8,14 +8,12 @@ import com.android.build.api.transform.QualifiedContent
 import com.android.build.api.transform.Transform
 import com.android.build.api.transform.TransformException
 import com.android.build.api.transform.TransformInput
-import com.android.build.api.transform.TransformInvocation
 import com.android.build.api.transform.TransformOutputProvider
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.utils.FileUtils
-import com.xiaomu.test.methodtime.InjectOnCreate
+import com.xiaomu.test.methodtime.InjectMethod
 import org.apache.commons.codec.digest.DigestUtils
 import org.gradle.api.Project
-import org.gradle.api.reporting.model.ModelReport
 
 class InjectTransform extends Transform {
 
@@ -63,7 +61,7 @@ class InjectTransform extends Transform {
                     DirectoryInput directoryInput ->
                         // 注入代码
 //                        MyInjectByJavassit.injectToast(directoryInput.file.absolutePath, mProject)
-                        InjectOnCreate.injectMethod(directoryInput.file.absolutePath, mProject)
+                        InjectMethod.injectMethod(directoryInput.file.absolutePath, mProject)
 
                         // 获取输出目录
                         def dest = outputProvider.getContentLocation(directoryInput.name,
