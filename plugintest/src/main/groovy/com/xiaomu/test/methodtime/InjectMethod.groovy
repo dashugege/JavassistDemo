@@ -19,6 +19,10 @@ class InjectMethod {
             def packagename =  project.configExtension.packageName
             classPool.appendClassPath(path)
             classPool.appendClassPath(project.android.bootClasspath[0].toString())
+            println("packagename: " + packagename)
+            println("packagename path : " + path)
+            println("packagename bootClasspath : " + project.android.bootClasspath[0].toString())
+
             classPool.importPackage('android.os.Bundle')
             File dir = new File(path)
             if (dir.isDirectory()) {
@@ -38,7 +42,11 @@ class InjectMethod {
                         CtClass ctClass =  classPool.getCtClass(packageName)
                         CtMethod [] ctMethods =  ctClass.getDeclaredMethods()
                         for(CtMethod method : ctMethods){
-                            calculationMethodTime(ctClass,method,path)
+                            try {
+                                calculationMethodTime(ctClass,method,path)
+                            } catch (Exception e) {
+
+                            }
                         }
                     }
 
